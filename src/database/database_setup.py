@@ -37,6 +37,18 @@ def inicializar_banco():
             )               
         ''')
 
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS procedimentos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                paciente_id INTEGER,
+                numero_dente INTEGER NOT NULL, -- Padrão 11 a 48
+                descricao_procedimento TEXT NOT NULL, -- Ex: Cárie, Canal, Extração
+                custo REAL,
+                data_realizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (paciente_id) REFERENCES pacientes (id)
+                )
+            ''')
+
         conn.commit()
         conn.close()
         print("✓ Banco de dados inicializado com sucesso.")
