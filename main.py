@@ -83,7 +83,7 @@ def menu_principal():
             p_id = input("ID do Paciente: ")
             dente = input("Número do Dente (11-48): ")
             desc = input("Descrição: ")
-            valor = float("Valor R$: ")
+            valor = float(input("Valor R$: "))
             registrar_procedimento(p_id, dente, desc, valor)
 
         elif opcao == "7":

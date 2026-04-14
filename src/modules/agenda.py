@@ -52,12 +52,3 @@ def atualizar_status_agenda(consulta_id, novo_status):
         print(f"✓ Status da consulta {consulta_id} atualizado.")
     except Exception as e:
         print(f"X Erro: {e}")
-
-if __name__ == "__main__":
-    data_teste = datetime.now().strftime("%Y-%m-%d 14:30:00")
-    agendar_consulta(1, data_teste, "Limpeza")
-
-    print("\n--- Agenda de Hoje ---")
-    hoje = datetime.now().strftime("%Y-%m-%d")
-    for c in listar_agenda_do_dia(hoje):
-        print(f"ID: {c[0]} | Paciente: {c[1]} | Horário: {c[2]} | Tipo: {c[3]} | Status: {c[4]}")

@@ -43,33 +43,3 @@ def listar_todos_pacientes():
     except Exception as e:
         print(f"X Erro ao listar pacientes: {e}")
         return[]
-
-#Bloco de teste manual
-if __name__ == "__main__":
-    while True:
-        print("\n--- Sistema OdontoFlow: Gestão de Pacientes ---")
-        print("1. Cadastrar Novo Paciente")
-        print("2. Buscar Paciente por CPF")
-        print("3. Sair")
-
-        opcao = input("Escolha uma opção: ")
-
-        if opcao == "1":
-            n = input("Nome: ")
-            c = input("CPF: ")
-            conv = input("Convênio: ")
-            ale = input("Alergias: ")
-            med = input("Medicamentos: ")
-            cadastrar_paciente(n, c, conv, ale, med)
-
-        elif opcao == "2":
-            c = input("Digite o CPF para busca: ")
-            resultado = buscar_paciente_por_cpf(c)
-            if resultado:
-                print(f"\nPaciente Encontrado: {resultado}")
-            else:
-                print("\nPaciente não Localizado.")
-
-        elif opcao == "3":
-            print("Encerrando módulo de pacientes . . .")
-            break
