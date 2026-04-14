@@ -32,6 +32,18 @@ def buscar_paciente_por_cpf(cpf):
     conn.close()
     return paciente
 
+def listar_todos_pacientes():
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, nome, cpf, convenio FROM pacientes ORDER BY nome ASC")
+        pacientes = cursor.fetchall()
+        conn.close()
+        return pacientes
+    except Exception as e:
+        print(f"X Erro ao listar pacientes: {e}")
+        return[]
+
 #Bloco de teste manual
 if __name__ == "__main__":
     while True:
