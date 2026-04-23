@@ -4,7 +4,7 @@ import os
 def conectar():
     #Busca o caminho do banco de dados na pasta raiz
     diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-    caminho_db = os.path.normpath(os.path.join(diretorio_atual, "..", "..", "data", "odontoflow.db"))
+    caminho_db = os.path.normpath(os.path.join(diretorio_atual, "..", "..", "data", "crystallis.db"))
     return sqlite3.connect(caminho_db)
 
 def cadastrar_paciente(nome, cpf, convenio, alergias = "", medicamentos = ""):

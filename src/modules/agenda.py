@@ -5,7 +5,7 @@ from datetime import datetime
 def conectar():
     #Buscando o caminho do Banco de Dados na pasta
     diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-    caminho_db = os.path.normpath(os.path.join(diretorio_atual, "..", "..", "data", "odontoflow.db"))
+    caminho_db = os.path.normpath(os.path.join(diretorio_atual, "..", "..", "data", "crystallis.db"))
     return sqlite3.connect(caminho_db)
 
 def agendar_consulta(paciente_id, data_hora, tipo_consulta):

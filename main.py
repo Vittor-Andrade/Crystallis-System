@@ -2,17 +2,20 @@ from src.modules.pacientes import cadastrar_paciente, buscar_paciente_por_cpf, l
 from src.modules.agenda import agendar_consulta, listar_agenda_do_dia, atualizar_status_agenda
 from src.modules.procedimentos import registrar_procedimento, listar_historico_dente
 from src.modules.financeiro import calcular_faturamento_total, faturamento_por_paciente
+from src.database.database_setup import inicializar_banco, conectar_db
+import auth
 from datetime import datetime
 import os
 
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def menu_principal():
+def menu_principal(usuario):
     while True:
         print("\n" + "="*50)
-        print("          SISTEMA ODONTOLOGICO v1.0")
+        print(f"          CRYSTALLIS SYSTEM v1.0 - Logado como: {usuario['nome']}")
         print("="*50)
+        
         print(" [PACIENTES]")
         print(" 1. Cadastrar Novo paciente")
         print(" 2. Buscar por CPF")
@@ -30,10 +33,11 @@ def menu_principal():
         print(" 8. Ver Histórico por Dente")
         print("-"*50)
 
-        print(" [GESTÃO]")
-        print(" 9. Relatório de Faturamento Total")
-        print(" 10. Faturamento por Paciente")
-        print("-"*50)
+        if usuario['cargo'] == "Dentista":
+            print(" [GESTÃO]")
+            print(" 9. Relatório de Faturamento Total")
+            print(" 10. Faturamento por Paciente")
+            print("-"*50)
 
         print(" 0. Sair")
         print("="*50)
@@ -100,8 +104,12 @@ def menu_principal():
             p_id = input("ID do Paciente: ")
             dente = input("Número do Dente (11-48): ")
             desc = input("Descrição: ")
-            valor = float(input("Valor R$: "))
-            registrar_procedimento(p_id, dente, desc, valor)
+            try:
+                valor = float(input("Valor R$: "))
+            except ValueError:
+                valor = 0.0
+                print("Valor inválido, registrado como 0.0")
+            registrar_procedimento(p_id, dente, desc, valor, usuario['id'])
 
         elif opcao == "8":
             print("\n---    PRONTUÁRIO POR DENTE    ---")
@@ -113,24 +121,41 @@ def menu_principal():
                 print("Nenhum procedimento registrado para este dente.")
             else:
                 for h in hist:
-                    print(f"Data: {h[0][:10]} | {h[1]} | R$ {h[2]:.2f}")
+                    print(f"Data: {h[0][:10]} | {h[1]} | R$ {h[2]:.2f} | Dr(a): {h[3]}")
 
         elif opcao == "9":
-            total = calcular_faturamento_total()
-            print(f" FATURAMENTO TOTAL: R$ {total:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+            if usuario['cargo'] == "Dentista":
+                total = calcular_faturamento_total()
+                print(f"FATURAMENTO TOTAL: R$ {total:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+            else:
+                print(f"[!] Acesso Negado!")
 
         elif opcao == "10":
-            print("\n---    FATURAMENTO POR PACIENTE    ---")
-            p_id = input("Digite o ID do Paciente: ")
-            total_p = faturamento_por_paciente(p_id)
-            print(f"\nPaciente ID: {p_id} | Total: R$ {total_p:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
-
+            if usuario['cargo'] == "Dentista":
+                print("\n---    FATURAMENTO POR PACIENTE    ---")
+                p_id = input("Digite o ID do Paciente: ")
+                total_p = faturamento_por_paciente(p_id)
+                print(f"\nPaciente ID: {p_id} | Total: R$ {total_p:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
+            else:
+                print("\n[!] Acesso Negado!")
+            
         elif opcao == "0":
-            print("\nSaíndo . . . Backup do sistema OdontoFlow realizado.")
+            print("\nSaíndo . . . Backup do Crystallis System realizado.")
             break
 
         input("\nPressione Enter para voltar ao menu . . .")
         limpar_tela()
 
 if __name__ == "__main__":
-    menu_principal()
+    inicializar_banco()
+    conn = conectar_db()
+    
+    limpar_tela()
+    usuario_logado = auth.fazer_login(conn)
+    
+    if usuario_logado:
+        limpar_tela()
+        menu_principal(usuario_logado)
+        conn.close()
+    else:
+        print("\nSistema encerrado. Falha na autenticação.")
