@@ -10,7 +10,7 @@ O **Crystallis System** é uma solução robusta voltada para a digitalização 
 
 A concepção visual e a jornada do usuário foram projetadas no **Figma**, priorizando a usabilidade para profissionais de saúde. 
 
-📍 **[Acesse aqui o Protótipo no Figma]([https://www.figma.com/make/lKROMmD1Cx0j1rprhZA2TJ/Dashboard-para-Crystallis?t=iw9POjotYhb56VCJ-1](https://www.figma.com/make/lKROMmD1Cx0j1rprhZA2TJ/Dashboard-para-Crystallis?p=f&t=kfEjzNnU7eSexvcn-0&fullscreen=1))**
+📍 **[Acesse aqui o Protótipo no Figma](https://www.figma.com/make/lKROMmD1Cx0j1rprhZA2TJ/Dashboard-para-Crystallis?t=iw9POjotYhb56VCJ-1)**
 
 ---
 
