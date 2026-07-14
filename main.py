@@ -10,6 +10,32 @@ import os
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+def ler_float(mensagem):
+    while True:
+        entrada = input(mensagem).strip().replace(',', '.')
+        if not entrada:
+            print("\033[33mAVISO: O valor não pode ser vazio.\033[0m")
+            continue
+        try:
+            valor = float(entrada)
+            if valor < 0:
+                print("\033[31mERRO: O valor não pode ser negativo.\033[0m")
+                continue
+            return valor
+        except ValueError:
+            print("\033[31mERRO: Digite um número decimal válido (ex: 150.50).\033[0m")
+
+def ler_int(mensagem):
+    while True:
+        entrada = input(mensagem).strip()
+        if not entrada:
+            print("\033[33mAVISO: O campo não pode ser vazio.\033[0m")
+            continue
+        try:
+            return int(entrada)
+        except ValueError:
+            print("\033[31mERRO: Digite um número inteiro válido.\033[0m")
+
 def menu_principal(usuario):
     while True:
         print("\n" + "="*50)

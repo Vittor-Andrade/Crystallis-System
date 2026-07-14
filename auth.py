@@ -1,8 +1,12 @@
-import sqlite3 
+import sqlite3
+import hashlib
+
+def gerar_hash(senha):
+#Transforma a senha em um código único e ilegivel.
+    return hashlib.sha256(senha.encode()).hexdigest()
 
 def fazer_login(conn):
     cursor = conn.cursor()
-
     #Verifica se existe algum usuário cadastrado
     cursor.execute("SELECT COUNT(*) FROM usuarios")
     if cursor.fetchone()[0] == 0:
