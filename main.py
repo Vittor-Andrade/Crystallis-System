@@ -3,8 +3,10 @@ from src.modules.agenda import agendar_consulta, listar_agenda_do_dia, atualizar
 from src.modules.procedimentos import registrar_procedimento, listar_historico_dente
 from src.modules.financeiro import calcular_faturamento_total, faturamento_por_paciente
 from src.database.database_setup import inicializar_banco, conectar_db
+from src.utils.validadores import validar_cpf, validar_data_hora
 import auth
 from datetime import datetime
+from src.modules.financeiro import calcular_faturamento_total, faturamento_por_paciente, exportar_relatorio_faturamento
 import os
 
 def limpar_tela():
@@ -63,6 +65,7 @@ def menu_principal(usuario):
             print(" [GESTÃO]")
             print(" 9. Relatório de Faturamento Total")
             print(" 10. Faturamento por Paciente")
+            print(" 11. Exportar Relatório em TXT (Impressão)")
             print("-"*50)
 
         print(" 0. Sair")
@@ -71,13 +74,21 @@ def menu_principal(usuario):
         opcao = input("Selecione a operação: ")
 
         if opcao == "1":
-            print("\n---    NOVO CADASTRO  ---")
-            nome = input("Nome Completo: ")
-            cpf = input("CPF: ")
-            conv = input("Convênio: ")
-            ale = input("Alergias: ")
-            med = input("Medicamentos: ")
-            cadastrar_paciente(nome, cpf, conv, ale, med)
+            print("\n---    NOVO CADASTRO   ---")
+            nome = input("Nome Completo: ").strip()
+
+            #Loop para validar o CPF
+            while True:
+                cpf = input("CPF (Apenas número): ").strip()
+                if validar_cpf(cpf):
+                    break
+                print("\033[31mX CPF Inválido! Digite um CPF real para continuar.\033]0m")
+
+                conv = input("Convenio: ").strip()
+                ale = input("Alergias: ").strip()
+                med = input("Medicamentos: ").strip()
+
+                cadastrar_paciente(nome, cpf, conv, ale, med)
 
         elif opcao == "2":
             cpf = input("\nDigite o CPF para busca: ")
@@ -109,10 +120,17 @@ def menu_principal(usuario):
             
         elif opcao == "5":
             print("\n---    AGENDAR CONSULTA    ---")
-            p_id = input("ID do Paciente: ")
-            data = input("Data e Hora (AAA-MM-DD HH:MM): ")
-            tipo = input("Tipo (Limpeza/Avaliação/Cirurgia): ")
+            p_id = ler_int("ID do Paciente: ")
+
+            #Loop de validação data/hora
+            while True:
+                data = input("Data e Hora (AAAA-MM-DD HH:MM): ").strip()
+                if validar_data_hora(data):
+                    break
+
+            tipo = input("Tipo (Limpeza / Avaliação / Cirurgia): ").strip()
             agendar_consulta(p_id, data, tipo)
+                         
 
         elif opcao == "6":
             print("\n---    ATUALIZAR AGENDA    ---")
@@ -164,6 +182,10 @@ def menu_principal(usuario):
                 print(f"\nPaciente ID: {p_id} | Total: R$ {total_p:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
             else:
                 print("\n[!] Acesso Negado!")
+
+        elif opcao == "11" and usuario['cargo'] == "Dentista":
+            print("\n---    EXPORTAR RELATÓRIO  ---")
+            exportar_relatorio_faturamento()
             
         elif opcao == "0":
             print("\nSaíndo . . . Backup do Crystallis System realizado.")
